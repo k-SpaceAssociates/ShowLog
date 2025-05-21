@@ -96,13 +96,16 @@ namespace ShowLogSDK
             //    return defaultLogPath;
 
             var lastUsedPath = _settingsProvider?.LastLogFilePath;
+            Debug.WriteLine($"Settings path from provider: {_settingsProvider?.LastLogFilePath}");
             if (!string.IsNullOrWhiteSpace(lastUsedPath) && File.Exists(lastUsedPath))
             {
-                var openLast = MessageBox.Show(
-                    $"Previously used file found:\n{lastUsedPath}\n\nOpen it?",
-                    "Log File Select",
-                    MessageBoxButton.YesNoCancel,
-                    MessageBoxImage.Question);
+                var openLast = MessageBoxResult.Yes;
+                // Uncomment the following line to show a message box asking if the user wants to open the last used file
+                //var openLast = MessageBox.Show(
+                //$"Previously used file found:\n{lastUsedPath}\n\nOpen it?",
+                //"Log File Select",
+                //MessageBoxButton.YesNoCancel,
+                //MessageBoxImage.Question);
 
                 if (openLast == MessageBoxResult.Yes)
                     return lastUsedPath;

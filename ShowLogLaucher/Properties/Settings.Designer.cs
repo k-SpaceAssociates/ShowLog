@@ -22,17 +22,5 @@ namespace ShowLogLauncher.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string LastLogFilePath {
-            get {
-                return ((string)(this["LastLogFilePath"]));
-            }
-            set {
-                this["LastLogFilePath"] = value;
-            }
-        }
     }
 }
