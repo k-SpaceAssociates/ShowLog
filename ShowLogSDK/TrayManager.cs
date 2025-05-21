@@ -1,4 +1,5 @@
 ﻿using Hardcodet.Wpf.TaskbarNotification;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -33,12 +34,42 @@ namespace ShowLogSDK
             try
             {
                 string programData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-                string logFilePath = Path.Combine(programData, "logs.txt");
+                string defaultLogPath = Path.Combine(programData, "logs.txt");
+                string? logFilePath = null;
 
-                if (!File.Exists(logFilePath))
+                if (File.Exists(defaultLogPath))
                 {
-                    MessageBox.Show($"Log file not found:\n{logFilePath}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
+                    logFilePath = defaultLogPath;
+                }
+                else
+                {
+                    var result = MessageBox.Show($"Default log file not found:\n{defaultLogPath}\n\nDo you want to browse for a log file?",
+                                                 "Log File Not Found",
+                                                 MessageBoxButton.YesNo,
+                                                 MessageBoxImage.Question);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        OpenFileDialog openFileDialog = new OpenFileDialog
+                        {
+                            Title = "Select Log File",
+                            Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
+                            InitialDirectory = programData
+                        };
+
+                        if (openFileDialog.ShowDialog() == true)
+                        {
+                            logFilePath = openFileDialog.FileName;
+                        }
+                        else
+                        {
+                            return; // User cancelled the dialog
+                        }
+                    }
+                    else
+                    {
+                        return; // User declined to browse
+                    }
                 }
 
                 Process.Start(new ProcessStartInfo
