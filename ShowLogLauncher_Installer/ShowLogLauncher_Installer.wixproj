@@ -1,0 +1,9 @@
+﻿<Project Sdk="WixToolset.Sdk/6.0.0">
+  <ItemGroup>
+    <Content Include="Ksa.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ShowLogLaucher\ShowLogLauncher.csproj" />
+    <ProjectReference Include="..\ShowLogSDK\ShowLogSDK.csproj" />
+  </ItemGroup>
+</Project>

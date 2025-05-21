@@ -1,0 +1,68 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+	<Fragment>
+		<ComponentGroup Id="AppComponents" Directory="INSTALLFOLDER">
+			<Component Id="RemoveInstallFolderContents" Guid="{EB7C3225-C13B-4697-9B85-1D44CDEEFBB7}">
+				<!-- Remove all files in INSTALLFOLDER -->
+				<RemoveFile Id="RemoveAllFiles" Directory="INSTALLFOLDER" Name="*.*" On="install" />
+			</Component>
+			<Component Id="cmp_ShowLogLauncher" Guid="{54882A28-AA27-4323-AAC7-D2E9D406F8EE}">
+				<File Id ="ShowLogLauncher" Source="ShowLogLauncher.exe" KeyPath="yes"/>
+			</Component>
+			<Component>
+				<File Source="Hardcodet.Wpf.TaskbarNotification.dll" />
+			</Component>
+			<Component>
+				<File Source="ShowLogLaucher.deps.json" />
+			</Component>
+			<Component>
+				<File Source="ShowLogLaucher.dll" />
+			</Component>
+			<Component>
+				<File Source="ShowLogLaucher.dll.config" />
+			</Component>
+			<Component>
+				<File Source="ShowLogLaucher.pdb" />
+			</Component>
+			<Component>
+				<File Source="ShowLogLaucher.runtimeconfig.json" />
+			</Component>
+			<Component>
+				<File Source="ShowLogLauncher.deps.json" />
+			</Component>
+			<Component>
+				<File Source="ShowLogLauncher.dll" />
+			</Component>
+			<Component>
+				<File Source="ShowLogLauncher.dll.config" />
+			</Component>
+			<Component>
+				<File Source="ShowLogLauncher.pdb" />
+			</Component>
+			<Component>
+				<File Source="ShowLogLauncher.runtimeconfig.json" />
+			</Component>
+			<Component>
+				<File Source="ShowLogSDK.dll" />
+			</Component>
+			<Component>
+				<File Source="ShowLogSDK.pdb" />
+			</Component>
+			<Component>
+				<File Source="kSA.ico" />
+			</Component>
+		</ComponentGroup>
+
+		<ComponentGroup Id="AppTrayItems" >
+
+			<Component Id="SystemTrayComponent" Guid="{62ABD18B-CA8D-488C-A027-64A7E7B92225}">
+				<RemoveFolder Id="RemoveMyAppMenuFolder" On="uninstall" Directory="ShowLogLauncherProgramMenuDir" />
+				<RegistryValue Root="HKCU" Key="Software\ShowLogLauncher" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+
+			</Component>
+
+			</ComponentGroup>
+	</Fragment>
+	<Fragment>
+		<Icon Id="kSA.ico" SourceFile="kSA.ico" />
+	</Fragment>
+</Wix>

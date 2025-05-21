@@ -1,0 +1,31 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+	<Fragment>
+		<StandardDirectory Id="DesktopFolder" />
+
+		<StandardDirectory Id="ProgramMenuFolder">
+			<!-- Add our application sub folder -->
+			<Directory
+			  Id="ShowLogLauncherProgramMenuDir"
+			  Name="kSA LogViewer"
+        >
+			</Directory>
+		</StandardDirectory>
+
+		<StandardDirectory Id="ProgramFiles6432Folder">
+			<!-- Add our company sub folder -->
+			<Directory
+			  Id="KSA32Folder"
+			  Name="!(bind.Property.Manufacturer)"
+        >
+				<!-- Add our application sub folder -->
+				<Directory
+				  Id="INSTALLFOLDER"
+				  Name="kSA LogViewer"
+        >
+				</Directory>
+			</Directory>
+		</StandardDirectory>
+
+	</Fragment>
+</Wix>
+

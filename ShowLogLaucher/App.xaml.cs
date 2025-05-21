@@ -4,7 +4,7 @@ using System.Windows;
 using System.Threading;
 using ShowLogSDK;
 
-namespace ShowLogLaucher
+namespace ShowLogLauncher
 {
     /// <summary>
     /// Interaction logic for App.xaml

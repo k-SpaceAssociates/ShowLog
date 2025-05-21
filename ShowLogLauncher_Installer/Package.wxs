@@ -1,0 +1,22 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+	<Package
+			 Name="ShowLogLauncher_Installer"
+			 Manufacturer="k-Space Associates, Inc."
+			 Version="1.0.0.0"
+			 UpgradeCode="{59F3D0E2-31B1-4952-BF81-57771AA87523}">
+
+		<!-- hint - reference the "Id" field of the desired "File" "Component -->
+		<SummaryInformation Description="Version: !(bind.fileVersion.ShowLogLauncher)"/>
+		<MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeError)" />
+		<MediaTemplate EmbedCab="yes" />
+
+		<!-- the icon that will show up in Add/Remove Programs -->
+		<!-- expected to be found in the root of the installer project folder-->
+		<Icon Id="icon.ico" SourceFile="Ksa.ico" />
+		<Property Id="ARPPRODUCTICON" Value="icon.ico" />
+		<Feature Id="Main">
+			<ComponentGroupRef Id="AppComponents" />
+			<ComponentGroupRef Id="AppTrayItems" />
+		</Feature>
+	</Package>
+</Wix>
