@@ -47,44 +47,9 @@ namespace ShowLogSDK
         {
             try
             {
-                string programData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-                string defaultLogPath = Path.Combine(programData, "logs.txt");
-                string? logFilePath = null;
-
-                if (File.Exists(defaultLogPath))
-                {
-                    logFilePath = defaultLogPath;
-                }
-                else
-                {
-                    var result = MessageBox.Show($"Default log file not found:\n{defaultLogPath}\n\nDo you want to browse for a log file?",
-                                                 "Log File Not Found",
-                                                 MessageBoxButton.YesNo,
-                                                 MessageBoxImage.Question);
-
-                    if (result == MessageBoxResult.Yes)
-                    {
-                        OpenFileDialog openFileDialog = new OpenFileDialog
-                        {
-                            Title = "Select Log File",
-                            Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
-                            InitialDirectory = programData
-                        };
-
-                        if (openFileDialog.ShowDialog() == true)
-                        {
-                            logFilePath = openFileDialog.FileName;
-                        }
-                        else
-                        {
-                            return; // User cancelled the dialog
-                        }
-                    }
-                    else
-                    {
-                        return; // User declined to browse
-                    }
-                }
+                string? logFilePath = GetLogFilePath();
+                if (string.IsNullOrWhiteSpace(logFilePath))
+                    return;
 
                 Process.Start(new ProcessStartInfo
                 {
@@ -98,6 +63,32 @@ namespace ShowLogSDK
             }
         }
 
+        private string? GetLogFilePath()
+        {
+            string programData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            string defaultLogPath = Path.Combine(programData, "logs.txt");
+
+            if (File.Exists(defaultLogPath))
+                return defaultLogPath;
+
+            var result = MessageBox.Show(
+                $"Default log file not found:\n{defaultLogPath}\n\nDo you want to browse for a log file?",
+                "Log File Not Found",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (result != MessageBoxResult.Yes)
+                return null;
+
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Title = "Select Log File",
+                Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
+                InitialDirectory = programData
+            };
+
+            return openFileDialog.ShowDialog() == true ? openFileDialog.FileName : null;
+        }
         public void Dispose()
         {
             _trayIcon.Dispose();
