@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-
+using System.Windows.Controls;
 
 
 namespace ShowLogSDK
@@ -26,9 +26,23 @@ namespace ShowLogSDK
                 ToolTipText = "Show Logs"
             };
 
+            // Add context menu
+            var contextMenu = new ContextMenu();
+
+            var openItem = new MenuItem { Header = "Open Log" };
+            openItem.Click += TrayIcon_TrayLeftMouseUp;
+
+            var exitItem = new MenuItem { Header = "Exit" };
+            exitItem.Click += (s, e) => Application.Current.Shutdown();
+
+            contextMenu.Items.Add(openItem);
+            contextMenu.Items.Add(new Separator());
+            contextMenu.Items.Add(exitItem);
+
+            _trayIcon.ContextMenu = contextMenu;
+
             _trayIcon.TrayLeftMouseUp += TrayIcon_TrayLeftMouseUp;
         }
-
         private void TrayIcon_TrayLeftMouseUp(object? sender, RoutedEventArgs e)
         {
             try
