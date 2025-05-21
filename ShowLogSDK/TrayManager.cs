@@ -86,20 +86,21 @@ namespace ShowLogSDK
             }
         }
 
+        //TO LOOK FOR A DEFAULT LOG FILE FIRST.
         private string? TryGetLogFilePath()
         {
             var programData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            var defaultLogPath = Path.Combine(programData, "logs.txt");
+            //var defaultLogPath = Path.Combine(programData, "logs.txt");
 
-            if (File.Exists(defaultLogPath))
-                return defaultLogPath;
+            //if (File.Exists(defaultLogPath))
+            //    return defaultLogPath;
 
             var lastUsedPath = _settingsProvider?.LastLogFilePath;
             if (!string.IsNullOrWhiteSpace(lastUsedPath) && File.Exists(lastUsedPath))
             {
                 var openLast = MessageBox.Show(
-                    $"Default log file not found:\n{defaultLogPath}\n\nPreviously used file found:\n{lastUsedPath}\n\nOpen it instead?",
-                    "Log File Not Found",
+                    $"Previously used file found:\n{lastUsedPath}\n\nOpen it?",
+                    "Log File Select",
                     MessageBoxButton.YesNoCancel,
                     MessageBoxImage.Question);
 
@@ -112,8 +113,8 @@ namespace ShowLogSDK
             }
 
             var browse = MessageBox.Show(
-                $"Default log file not found:\n{defaultLogPath}\n\nDo you want to browse for a log file?",
-                "Log File Not Found",
+                $"Do you want to browse for a log file?",
+                "Select a log file.",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
 
@@ -129,6 +130,7 @@ namespace ShowLogSDK
 
             return openFileDialog.ShowDialog() == true ? openFileDialog.FileName : null;
         }
+
 
         private void SaveLastLogFilePath(string path)
         {
