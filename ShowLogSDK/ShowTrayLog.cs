@@ -1,10 +1,11 @@
 ﻿
 
-using System;
-using System.Diagnostics;
-using System.Drawing;
 using Hardcodet.Wpf.TaskbarNotification;
 using System;
+using System;
+using System.Configuration;
+using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Windows;
 
@@ -14,10 +15,10 @@ namespace ShowLogSDK
     {
         private static TrayManager? _trayManager;
 
-        public static void Start()
+        public static void Start(ILogFileSettingsProvider settingsProvider)
         {
             if (_trayManager == null)
-                _trayManager = new TrayManager();
+                _trayManager = new TrayManager(settingsProvider);
         }
 
         public static void Stop()

@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -14,19 +15,27 @@ using System.Windows.Controls;
 
 namespace ShowLogSDK
 {
+    public interface ILogFileSettingsProvider
+    {
+        string? LastLogFilePath { get; set; }
+        void Save();
+    }
     public class TrayManager : IDisposable
     {
         private readonly TaskbarIcon _trayIcon;
+        private readonly ILogFileSettingsProvider? _settingsProvider;
 
-        public TrayManager()
+        public TrayManager(ILogFileSettingsProvider? settingsProvider = null)
         {
+            _settingsProvider = settingsProvider;
+
             _trayIcon = new TaskbarIcon
             {
                 Icon = SystemIcons.Application,
                 ToolTipText = "Show Logs"
             };
 
-            // Add context menu
+            // Context menu setup
             var contextMenu = new ContextMenu();
 
             var openItem = new MenuItem { Header = "Open Log" };
@@ -47,48 +56,108 @@ namespace ShowLogSDK
         {
             try
             {
-                string? logFilePath = GetLogFilePath();
-                if (string.IsNullOrWhiteSpace(logFilePath))
-                    return;
+                string programData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+                string defaultLogPath = Path.Combine(programData, "logs.txt");
+                string? logFilePath = null;
 
-                Process.Start(new ProcessStartInfo
+                // Use last saved path from injected settings provider if available
+                string? lastUsedPath = _settingsProvider?.LastLogFilePath;
+
+                if (File.Exists(defaultLogPath))
                 {
-                    FileName = logFilePath,
-                    UseShellExecute = true
-                });
+                    logFilePath = defaultLogPath;
+                }
+                else if (!string.IsNullOrWhiteSpace(lastUsedPath) && File.Exists(lastUsedPath))
+                {
+                    var result = MessageBox.Show(
+                        $"Default log file not found:\n{defaultLogPath}\n\nPreviously used file found:\n{lastUsedPath}\n\nOpen it instead?",
+                        "Log File Not Found",
+                        MessageBoxButton.YesNoCancel,
+                        MessageBoxImage.Question);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        logFilePath = lastUsedPath;
+                    }
+                    else if (result == MessageBoxResult.Cancel)
+                    {
+                        return;
+                    }
+                    // else fall through to browse
+                }
+
+                if (logFilePath == null)
+                {
+                    var result = MessageBox.Show(
+                        $"Default log file not found:\n{defaultLogPath}\n\nDo you want to browse for a log file?",
+                        "Log File Not Found",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question);
+
+                    if (result != MessageBoxResult.Yes)
+                        return;
+
+                    OpenFileDialog openFileDialog = new OpenFileDialog
+                    {
+                        Title = "Select Log File",
+                        Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
+                        InitialDirectory = programData
+                    };
+
+                    if (openFileDialog.ShowDialog() == true)
+                    {
+                        logFilePath = openFileDialog.FileName;
+                    }
+                    else
+                    {
+                        return; // user cancelled browse
+                    }
+                }
+
+                // Save the chosen path for next time
+                if (_settingsProvider != null)
+                {
+                    _settingsProvider.LastLogFilePath = logFilePath;
+                    _settingsProvider.Save();
+
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = logFilePath,
+                        UseShellExecute = true
+                    });
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Failed to open log file:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        //private string? GetLogFilePath()
+        //{
+        //    string programData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+        //    string defaultLogPath = Path.Combine(programData, "logs.txt");
 
-        private string? GetLogFilePath()
-        {
-            string programData = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            string defaultLogPath = Path.Combine(programData, "logs.txt");
+        //    if (File.Exists(defaultLogPath))
+        //        return defaultLogPath;
 
-            if (File.Exists(defaultLogPath))
-                return defaultLogPath;
+        //    var result = MessageBox.Show(
+        //        $"Default log file not found:\n{defaultLogPath}\n\nDo you want to browse for a log file?",
+        //        "Log File Not Found",
+        //        MessageBoxButton.YesNo,
+        //        MessageBoxImage.Question);
 
-            var result = MessageBox.Show(
-                $"Default log file not found:\n{defaultLogPath}\n\nDo you want to browse for a log file?",
-                "Log File Not Found",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
+        //    if (result != MessageBoxResult.Yes)
+        //        return null;
 
-            if (result != MessageBoxResult.Yes)
-                return null;
+        //    OpenFileDialog openFileDialog = new OpenFileDialog
+        //    {
+        //        Title = "Select Log File",
+        //        Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
+        //        InitialDirectory = programData
+        //    };
 
-            OpenFileDialog openFileDialog = new OpenFileDialog
-            {
-                Title = "Select Log File",
-                Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*",
-                InitialDirectory = programData
-            };
-
-            return openFileDialog.ShowDialog() == true ? openFileDialog.FileName : null;
-        }
+        //    return openFileDialog.ShowDialog() == true ? openFileDialog.FileName : null;
+        //}
         public void Dispose()
         {
             _trayIcon.Dispose();

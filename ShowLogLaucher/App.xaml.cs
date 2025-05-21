@@ -15,8 +15,9 @@ namespace ShowLogLaucher
         {
             base.OnStartup(e);
 
-            ShowLogTray.Start();
-            // Optionally hide the main window if you want
+            var settingsProvider = new SettingsProvider();
+            ShowLogTray.Start(settingsProvider);
+
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
         }
 
