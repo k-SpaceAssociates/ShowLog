@@ -32,7 +32,7 @@ namespace ShowLogSDK
             _trayIcon = new TaskbarIcon
             {
                 Icon = SystemIcons.Application,
-                ToolTipText = "Show Logs"
+                ToolTipText = "Left click to Show Logs, right click for exit option."
             };
 
             // Context menu setup
