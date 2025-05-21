@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Reflection;
 
 
 namespace ShowLogSDK
@@ -29,9 +30,21 @@ namespace ShowLogSDK
         {
             _settingsProvider = settingsProvider;
 
+            // Load the icon from embedded resources
+            Icon icon;
+            var assembly = Assembly.GetExecutingAssembly();
+            using (Stream? stream = assembly.GetManifestResourceStream("ShowLogSDK.Resources.Ksa.ico"))
+            {
+                if (stream == null)
+                    throw new FileNotFoundException("Ksa.ico not found in resources.");
+
+                icon = new Icon(stream);
+            }
+
             _trayIcon = new TaskbarIcon
             {
-                Icon = SystemIcons.Application,
+                //Icon = SystemIcons.Application,
+                Icon = icon,
                 ToolTipText = "Left click to Show Logs, right click for exit option."
             };
 
