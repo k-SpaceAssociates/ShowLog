@@ -37,15 +37,18 @@ namespace ShowLogSDK
 
             // Context menu setup
             var contextMenu = new ContextMenu();
-
-            var openItem = new MenuItem { Header = "Open Log" };
-            openItem.Click += TrayIcon_TrayLeftMouseUp;
+            bool addMenuOpen = false;
+            if(addMenuOpen)
+            {
+                var openItem = new MenuItem { Header = "Open Log" };
+                openItem.Click += TrayIcon_TrayLeftMouseUp;
+                contextMenu.Items.Add(openItem);
+                contextMenu.Items.Add(new Separator());
+            }
 
             var exitItem = new MenuItem { Header = "Exit" };
             exitItem.Click += (s, e) => Application.Current.Shutdown();
 
-            contextMenu.Items.Add(openItem);
-            contextMenu.Items.Add(new Separator());
             contextMenu.Items.Add(exitItem);
 
             _trayIcon.ContextMenu = contextMenu;
