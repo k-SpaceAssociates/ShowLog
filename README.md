@@ -6,6 +6,7 @@ A WPF SDK and application suite for automation integration with kSA systems.
 
 - `ShowLogSDK`: The core automation SDK (NuGet package-ready)
 - `ShowLogLauncher`: Test harness for SDK
+- `ShowLogLauncher_Installer`: Wix installer project for the test harness
 
 ## Features
 
