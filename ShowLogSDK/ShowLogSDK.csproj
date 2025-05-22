@@ -5,6 +5,19 @@
 		<UseWPF>true</UseWPF>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageId>ShowLogSDK</PackageId>
+		<Version>1.0.0</Version>
+		<Authors>DES</Authors>
+		<Company>k-Space Associates, Inc.</Company>
+		<Description>A WPF SDK for ShowLogSDK project.</Description>
+		<PackageOutputPath>$(OutputPath)</PackageOutputPath>
+		<!-- Defaults to bin\Release -->
+		<RepositoryUrl>https://github.com/k-SpaceAssociates/ShowLog</RepositoryUrl><!-- Optional -->
+		<RepositoryType>git</RepositoryType>
+		<RepositoryBranch>master</RepositoryBranch>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
 
 	<ItemGroup>
