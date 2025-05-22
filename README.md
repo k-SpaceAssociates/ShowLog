@@ -1,4 +1,4 @@
-# kSAIDAutomation
+# ShowLogLauncher
 
 A WPF SDK and application suite for automation integration with kSA systems.
 
