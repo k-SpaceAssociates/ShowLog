@@ -6,6 +6,12 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+	<VersionPrefix>1.0.1</VersionPrefix>
+	<!-- Set all assembly version info to match VersionPrefix -->
+	<Version>$(VersionPrefix)</Version>
+	<AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
+	<FileVersion>$(VersionPrefix).0</FileVersion>
+	<AssemblyInformationalVersion>$(VersionPrefix)</AssemblyInformationalVersion>  
   </PropertyGroup>
 
   <ItemGroup>
