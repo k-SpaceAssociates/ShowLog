@@ -1,6 +1,8 @@
 # ShowLogLauncher
 
-A WPF SDK and application suite for automation integration with kSA systems.
+A WPF SDK and application suite for automation integration with kSA systems. Creates a
+system tray application for displaying logs. Uses C:\ProgramData\showLogs\settings.json to 
+get the path used to read the log.
 
 ## Projects
 
